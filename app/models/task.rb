@@ -1,18 +1,21 @@
 class Task < ApplicationRecord
-    validates :name, presence: true
-    validate :validate_name_not_including_comma
+  paginates_per 50
+  has_one_attached :image
 
-    belongs_to :user
+  validates :name, presence: true
+  validate :validate_name_not_including_comma
 
-    scope :recent, -> {order(created_at: :desc)}
+  belongs_to :user
 
-    private
+  scope :recent, -> { order(created_at: :desc) }
 
-    def set_nameless_name
-        self.name = '名前なし' if name.blank?
-    end
+  private
 
-    def validate_name_not_including_comma
-        errors.add(:name,'にカンマを含めることはできません') if name&.include?(',')
-    end
+  def set_nameless_name
+    self.name = '名前なし' if name.blank?
+  end
+
+  def validate_name_not_including_comma
+    errors.add(:name, 'にカンマを含めることはできません') if name&.include?(',')
+  end
 end

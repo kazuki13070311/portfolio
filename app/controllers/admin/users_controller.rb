@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::UsersController < ApplicationController
   def index
     @users = User.all
@@ -29,7 +31,7 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
 
     if @user.update(user_params)
-      redirect_to admin_user_url(@user),notice: "ガーディアン「#{@user.name}」を更新しました。"
+      redirect_to admin_user_url(@user), notice: "ガーディアン「#{@user.name}」を更新しました。"
     else
       render :new
     end
@@ -44,7 +46,7 @@ class Admin::UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).premit(:name,:email,:admin,:password,:password_confirmation)
+    params.require(:user).permit(:name, :email, :admin, :password, :password_confirmation)
   end
 
   def require_admin

@@ -1,18 +1,35 @@
 h1 フレンド募集掲示板
 
-= link_to '新規作成', new_task_path, class: 'btn-primary'
+= search_form_for @q, class: 'mb-5' do |f|
+    .form-group.row
+        = f.label :description_cont, 'キーワード',class: 'col-sm-2 col-form-label'
+        .col-sm-10
+            = f.search_field :description_cont, class: 'form-control'
+    .form-group.row
+        = f.label :created_at_gteq, '登録日時',class: 'col-sm-2 col-form-label'
+        .col-sm-10
+            = f.search_field :created_at_gteq, class: 'form-control'
+    .form-group
+        = f.submit class: 'btn btn-outline-primary'
+
+= link_to '新規作成', new_task_path, class: 'btn btn-primary mb-3'
 
 .mb-3
+    = paginate @tasks
+    = page_entries_info @tasks
+
 table.table.table-hover
     thead.thead-default
         tr
-            th= Task.human_attribute_name(:name) 
+            th= sort_link(@q, :name,default_order: :desc) 
+            th= Task.human_attribute_name(:description)
             th= Task.human_attribute_name(:created_at)
             th
         tbody
             - @tasks.each do |task|
                 tr
                     td= link_to task.name,task_path(task)
+                    td= task.description
                     td= task.created_at
                     td
                         = link_to '編集',edit_task_path(task),class: 'btn btn-primary mr-3'
